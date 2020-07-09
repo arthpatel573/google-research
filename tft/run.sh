@@ -43,4 +43,3 @@ python3 -m script_train_fixed_params $EXPT $OUTPUT_FOLDER $USE_GPU
 
 # Uncomment below for full hyperparamter optimisation.
 # python3 -m script_hyperparam_opt $EXPT $OUTPUT_FOLDER $USE_GPU
-

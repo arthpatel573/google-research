@@ -700,7 +700,7 @@ class TemporalFusionTransformer(object):
         ]
 
         for i, tup in enumerate(ranges):
-            if (i + 1 % 1000) == 0:
+            if ((i + 1) % 1000) == 0:
                 print(i + 1, "of", max_samples, "samples done...")
             identifier, start_idx = tup
             sliced = split_data_map[identifier].iloc[

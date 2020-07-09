@@ -20,7 +20,7 @@ import os
 import pathlib
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from tensorflow.python.tools.inspect_checkpoint import print_tensors_in_checkpoint_file
 
 
@@ -234,4 +234,3 @@ def print_weights_in_checkpoint(model_folder, cp_name):
     print_tensors_in_checkpoint_file(
         file_name=load_path, tensor_name="", all_tensors=True, all_tensor_names=True
     )
-

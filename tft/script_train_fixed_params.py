@@ -205,7 +205,7 @@ if __name__ == "__main__":
             metavar="e",
             type=str,
             nargs="?",
-            default="volatility",
+            default="walmart",
             choices=experiment_names,
             help="Experiment Name. Default={}".format(",".join(experiment_names)),
         )
@@ -249,4 +249,3 @@ if __name__ == "__main__":
         data_formatter=formatter,
         use_testing_mode=True,
     )  # Change to false to use original default params
-

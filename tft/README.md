@@ -20,30 +20,29 @@ The key modules for experiments are organised as:
 Scripts are all saved in the main folder, with descriptions below:
 
 * **run.sh**: Simple shell script to ensure correct environmental setup.
-* **script\_download\_data.py**: Downloads data for the main experiment and processes them into csv files ready for training/evaluation.
 * **script\_train\_fixed\_params.py**: Calibrates the TFT using a predefined set of hyperparameters, and evaluates for a given experiment.
 * **script\_hyperparameter\_optimisation.py**: Runs full hyperparameter optimization using the default random search ranges defined for the TFT.
 
 ## Running Default Experiements
-Our four default experiments are divided into ``volatility``, ``electricity``, ``traffic``, and``favorita``. To run these experiments, first download the data, and then run the relevant training routine.
+To run ``walmart`` experiment, first download the data,  preprocess it and then run the relevant training routine.
 
 ### Step 1: Download data for default experiments
 To download the experiment data, run the following script:
 ```bash
 python3 -m script_download_data $EXPT $OUTPUT_FOLDER
 ```
-where ``$EXPT`` can be any of {``volatility``, ``electricity``, ``traffic``, ``favorita``}, and ``$OUTPUT_FOLDER`` denotes the root folder in which experiment outputs are saved.
+where ``$EXPT`` can be any of {``walmart``}, and ``$OUTPUT_FOLDER`` denotes the root folder in which experiment outputs are saved.
 
 ### Step 2: Train and evaluate network
 To train the network with the optimal default parameters, run:
 ```bash
 python3 -m script_train_fixed_params $EXPT $OUTPUT_FOLDER $USE_GPU 
 ```
-where ``$EXPT`` and ``$OUTPUT_FOLDER`` are as above, ``$GPU`` denotes whether to run with GPU support (options are {``'yes'`` or``'no'``}).
+where ``$EXPT`` and ``$OUTPUT_FOLDER`` are as above, ``$GPU`` denotes whether to run with GPU support (options are {``True`` or``False``}).
 
 For full hyperparameter optimization, run:
 ```bash
-python3 -m script_hyperparam_opt $EXPT $OUTPUT_FOLDER $USE_GPU yes
+python3 -m script_hyperparam_opt $EXPT $OUTPUT_FOLDER $USE_GPU
 ```
 where options are as above.
 
@@ -56,7 +55,7 @@ First, create a new python file in ``data_formatters`` (e.g. example.py) which c
 ### Step 2: Update configs.py
 Add a name for your new experiement to the ``default_experiments`` attribute in ``expt_settings.configs.ExperimentConfig`` (e.g. ``example``).
 ```python
-default_experiments = ['volatility', 'electricity', 'traffic', 'favorita', 'example']
+default_experiments = ['walmart', 'example']
 ```
 
 
@@ -66,10 +65,7 @@ Next, add an entry in ``data_csv_path`` mapping the experiment name to name of t
 @property
   def data_csv_path(self):
     csv_map = {
-        'volatility': 'formatted_omi_vol.csv',
-        'electricity': 'hourly_electricity.csv',
-        'traffic': 'hourly_data.csv',
-        'favorita': 'favorita_consolidated.csv',
+        'walmart': 'walmart.csv',
         'example': 'mydata.csv'  # new entry here!
     }
 
@@ -87,9 +83,7 @@ def make_data_formatter(self):
     """
 
     data_formatter_class = {
-        'volatility': data_formatters.volatility.VolatilityFormatter,
-        'electricity': data_formatters.electricity.ElectricityFormatter,
-        'traffic': data_formatters.traffic.TrafficFormatter,
+        'walmart': data_formatters.walmart.WalmartFormatter,
         'example': data_formatters.example.ExampleFormatter, # new entry here!
     }
 ```
@@ -104,13 +98,13 @@ As an optional step, change the number of random search iterations if required:
     if self.experiment == 'example':
       return my_serach_iterations
     else:
-      return 240 if self.experiment == 'volatility' else 60
+      return 60
 ```
 
 
 ### Step 3: Run training script
 Full hyperparameter optimization can then be run as per the previous section, e.g.:
 ```bash
-python3 -m script_hyperparam_opt example . yes yes
+python3 -m script_hyperparam_opt example . True
 
 ```
